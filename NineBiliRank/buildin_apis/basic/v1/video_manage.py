@@ -18,7 +18,7 @@ video_manager_router = APIRouter(
 )
 
 
-@video_manager_router.post("/RegVideo")
+@video_manager_router.post("/reg_new_video")
 async def reg_video(video_id: str = Form()) -> ResponseModel:
     _filter = get_filter()
     video = Video(video_id)
@@ -36,7 +36,7 @@ async def reg_video(video_id: str = Form()) -> ResponseModel:
     )
 
 
-@video_manager_router.post("/DeleteVideo")
+@video_manager_router.delete("/delete_video")
 async def delete_video_(video_id: str = Form()) -> ResponseModel:
     video = Video(video_id)
     await video.async_update_basic_data()
@@ -46,7 +46,7 @@ async def delete_video_(video_id: str = Form()) -> ResponseModel:
     )
 
 
-@video_manager_router.post("/UpdateVideo")
+@video_manager_router.post("/update_video")
 async def update_video_(video_id: str = Form()) -> ResponseModel:
     video = Video(video_id)
     await video.async_update_basic_data()

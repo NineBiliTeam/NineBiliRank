@@ -14,7 +14,7 @@ class Count(BaseModel):
     count: int = Field(default=0, title="表内数据数量")
 
 
-@database_router.get("/VideoCount")
+@database_router.get("/video_count")
 async def get_video_count() -> Count:
     """
     获取数据库内视频数量
@@ -23,7 +23,7 @@ async def get_video_count() -> Count:
     return Count(count=await VideoDB.count())
 
 
-@database_router.get("/UploaderCount")
+@database_router.get("/uploader_count")
 async def get_video_count() -> Count:
     """
     获取数据库内UP主数量
