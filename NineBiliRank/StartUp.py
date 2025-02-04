@@ -91,6 +91,7 @@ start_hooks = list()
 def reg_start_hooks(func: callable):
     start_hooks.append(func)
 
+
 from buildin_hooks import reg_video_from_file
 
 
