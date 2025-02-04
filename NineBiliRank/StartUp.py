@@ -1,10 +1,9 @@
 from contextlib import asynccontextmanager
-from types import coroutine
 
 import fastapi_cdn_host
 import uvicorn
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI
 from fastapi.params import Depends
 from starlette.responses import JSONResponse
 from uvicorn_loguru_integration import run_uvicorn_loguru
@@ -12,13 +11,13 @@ from uvicorn_loguru_integration import run_uvicorn_loguru
 from buildin_apis.depends.key_auth import key_auth
 from config import get_config, get_apikey, get_config_from_file, Config
 from exceptions.BilibiliException import BilibiliException
-from filter.BaseFilter import BaseFilter
-from http_utils.proxy.BaseProxyPool import BaseProxyPool
+
 from logger import logger
 from scheduler.reset_database import reset_database
 
 tasks, scheduler = list(), AsyncIOScheduler()
 routers = list()
+start_hooks = list()
 
 
 @asynccontextmanager
@@ -26,7 +25,6 @@ async def start_hook(_app: FastAPI):
     """
     FastAPI启动钩子
     """
-    await reset_database()
     for task in tasks:
         scheduler.add_job(*task[0], **task[1])
         logger.success(f"成功启用定时任务：{task[0][0].__name__}")
@@ -54,6 +52,7 @@ def init(
     tasks_=None,
     proxy_pool=None,
     routers_=None,
+    start_hooks_=None,
 ):
     """
     初始化NineBiliRank
@@ -63,14 +62,17 @@ def init(
     :param routers_: 自定义APIRouter列表
     :return:
     """
-    global tasks, routers
+    global tasks, routers, start_hooks
     if tasks_ is None:
         tasks_ = []
     if routers_ is None:
         routers_ = []
+    if start_hooks_ is None:
+        start_hooks_ = []
     Config.get_instance(proxy_pool=proxy_pool, filter_=filter_)
     routers = routers_
     tasks = tasks_
+    start_hooks = start_hooks_
 
 
 config = get_config_from_file()
@@ -86,15 +88,6 @@ fastapi_app: FastAPI = FastAPI(
 )
 
 fastapi_cdn_host.patch_docs(fastapi_app)
-
-start_hooks = list()
-
-
-def reg_start_hooks(func: callable):
-    start_hooks.append(func)
-
-
-from buildin_hooks import reg_video_from_file
 
 
 @logger.catch

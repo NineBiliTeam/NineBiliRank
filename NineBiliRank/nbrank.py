@@ -1,8 +1,6 @@
 import StartUp
 from buildin_apis.basic.v1 import basic_v1_router
-from filter.buildin_filters import VocaloidChinaFilter
-from filters.test_vocaloid_china_filter import filter_
-from http_utils.proxy.proxy_pools import MixinProxyPool, NoneProxyPool, JHaoProxyPool
+from buildin_hooks.reg_video_from_file import reg_video_from_file
 from scheduler.reset_database import reset_database
 
 """
@@ -23,6 +21,7 @@ if __name__ == "__main__":
             ]
         ],
         routers_=[basic_v1_router],
+        start_hooks_=[reg_video_from_file]
     )
     # 启动NineBiliRank
     StartUp.run()

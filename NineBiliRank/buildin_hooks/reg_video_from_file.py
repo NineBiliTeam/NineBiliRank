@@ -3,7 +3,6 @@ import os
 import random
 from pathlib import Path
 
-from StartUp import reg_start_hooks
 from bilibili_modles.Video import Video
 from config import get_config
 from database.utils.add_video import add_video_to_db
@@ -35,6 +34,3 @@ async def reg_video_from_file():
         await asyncio.sleep(random.uniform(rand_min, rand_max))
     os.remove(path)
     logger.success("批量导入完成，已经删除文件...")
-
-
-reg_start_hooks(reg_video_from_file)

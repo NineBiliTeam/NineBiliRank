@@ -26,7 +26,8 @@ NineBiliRank是一个用于Bilibili数据收集的数据框架，基于httpx, fa
 ```python
 import StartUp
 from buildin_apis.basic.v1 import basic_v1_router # 内建路由模块 BASIC V1
-from scheduler.reset_database import reset_database # 内建 任务数据库重置
+from scheduler.reset_database import reset_database # 内建任务 数据库重置
+from buildin_hooks.reg_video_from_file import reg_video_from_file # 内建钩子 从文件注册视频
 
 """
 NineBiliRank
@@ -46,6 +47,7 @@ if __name__ == "__main__":
         ],
         # routers_：路由列表，在这里放入需要拓展的APIRouter
         routers_=[basic_v1_router],
+        start_hooks_=[reg_video_from_file]
     )
     # 启动NineBiliRank
     StartUp.run()
