@@ -15,6 +15,7 @@ from exceptions.BilibiliException import BilibiliException
 from filter.BaseFilter import BaseFilter
 from http_utils.proxy.BaseProxyPool import BaseProxyPool
 from logger import logger
+from scheduler.reset_database import reset_database
 
 tasks, scheduler = list(), AsyncIOScheduler()
 routers = list()
@@ -25,6 +26,7 @@ async def start_hook(_app: FastAPI):
     """
     FastAPI启动钩子
     """
+    await reset_database()
     for task in tasks:
         scheduler.add_job(*task[0], **task[1])
         logger.success(f"成功启用定时任务：{task[0][0].__name__}")
