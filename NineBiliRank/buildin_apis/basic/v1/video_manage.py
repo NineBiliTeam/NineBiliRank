@@ -17,6 +17,7 @@ video_manager_router = APIRouter(
     prefix="/VideoManager", tags=["Manage"], dependencies=[Depends(key_auth)]
 )
 
+
 @video_manager_router.post("/RegVideo")
 async def reg_video(video_id: str = Form()) -> ResponseModel:
     _filter = get_filter()

@@ -18,25 +18,28 @@ async def reset_database():
     logger.info("正在重置视频")
     i = 0
     # 重置视频
-    while True:
-        i += 1
-        async with async_session() as session:
-            from sqlalchemy import select
+    total = 1
+    for _ in range(total):
+        while True:
+            i += 1
+            async with async_session() as session:
+                from sqlalchemy import select
 
-            sql = select(VideoDB).where(VideoDB.nbid == i)
-            result = await session.scalars(sql)
-            result = result.all()
-            if len(result) == 0:
-                break
+                sql = select(VideoDB).where(VideoDB.nbid == i)
+                result = await session.scalars(sql)
+                result = result.all()
+                if len(result) == 0:
+                    continue
 
-        video_db: VideoDB = result[0]
-        try:
-            video = Video(video_db.bvid)
-            await video.async_update_basic_data()
-            await update_video(video)
-        except Exception as e:
-            logger.error(f"出现异常{type(e)}:{e.args}")
-        await asyncio.sleep(random.uniform(rand_min, rand_max))
+            video_db: VideoDB = result[0]
+            try:
+                video = Video(video_db.bvid)
+                await video.async_update_basic_data()
+                await update_video(video)
+            except Exception as e:
+                logger.error(f"出现异常{type(e)}:{e.args}")
+            await asyncio.sleep(random.uniform(rand_min, rand_max))
+            break
 
     logger.info("视频数据重置完成")
     i = 0
