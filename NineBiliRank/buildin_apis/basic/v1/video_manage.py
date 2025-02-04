@@ -16,11 +16,10 @@ from database.utils.update_video import update_video
 video_manager_router = APIRouter(
     prefix="/VideoManager", tags=["Manage"], dependencies=[Depends(key_auth)]
 )
-_filter = get_filter()
-
 
 @video_manager_router.post("/RegVideo")
 async def reg_video(video_id: str = Form()) -> ResponseModel:
+    _filter = get_filter()
     video = Video(video_id)
     await video.async_update_basic_data()
     is_legal = await _filter.check(video)
