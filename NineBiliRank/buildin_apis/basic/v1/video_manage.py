@@ -14,14 +14,14 @@ from database.utils.delete_video import delete_video
 from database.utils.update_video import update_video
 
 video_manager_router = APIRouter(
-    prefix="/VideoManager", tags=["Manage"], dependencies=[Depends(key_auth)]
+    prefix="/video_manager", tags=["Manage"], dependencies=[Depends(key_auth)]
 )
 
 
 @video_manager_router.post("/reg_new_video")
-async def reg_video(video_id: str = Form()) -> ResponseModel:
+async def reg_video(vid: str = Form(title="视频ID（支持AVID与BVID）")) -> ResponseModel:
     _filter = get_filter()
-    video = Video(video_id)
+    video = Video(vid)
     await video.async_update_basic_data()
     is_legal = await _filter.check(video)
     if not is_legal:
@@ -37,8 +37,8 @@ async def reg_video(video_id: str = Form()) -> ResponseModel:
 
 
 @video_manager_router.delete("/delete_video")
-async def delete_video_(video_id: str = Form()) -> ResponseModel:
-    video = Video(video_id)
+async def delete_video_(vid: str = Form("视频ID（支持AVID与BVID）")) -> ResponseModel:
+    video = Video(vid)
     await video.async_update_basic_data()
     await delete_video(video)
     return ResponseModel(
@@ -47,8 +47,8 @@ async def delete_video_(video_id: str = Form()) -> ResponseModel:
 
 
 @video_manager_router.post("/update_video")
-async def update_video_(video_id: str = Form()) -> ResponseModel:
-    video = Video(video_id)
+async def update_video_(vid: str = Form("视频ID（支持AVID与BVID）")) -> ResponseModel:
+    video = Video(vid)
     await video.async_update_basic_data()
     await update_video(video)
     return ResponseModel(

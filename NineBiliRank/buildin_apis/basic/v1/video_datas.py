@@ -11,7 +11,7 @@ from database.utils.search_video import (
     search_video_by_title_keyword,
 )
 
-video_router = APIRouter(prefix="/Video", tags=["Video"])
+video_router = APIRouter(prefix="/video", tags=["Video"])
 
 
 @video_router.get("/{vid}/get_stat")

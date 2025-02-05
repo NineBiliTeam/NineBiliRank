@@ -59,7 +59,8 @@ def init(
     :param filter_: 视频过滤器
     :param tasks_: 定时任务列表：[[函数名, 触发器], {其他参数的字典...}]
     :param proxy_pool: 自定义代理源
-    :param routers_: 自定义APIRouter列表
+    :param routers_: 自定义APIRouter列表:
+    :param start_hooks_: 启动钩子列表
     :return:
     """
     global tasks, routers, start_hooks

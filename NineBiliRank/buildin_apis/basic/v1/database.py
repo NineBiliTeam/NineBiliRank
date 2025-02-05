@@ -5,7 +5,7 @@ from database.model.Uploader import UploaderDB
 from database.model.Video import VideoDB
 
 database_router = APIRouter(
-    prefix="/Database",
+    prefix="/database",
     tags=["Database"],
 )
 

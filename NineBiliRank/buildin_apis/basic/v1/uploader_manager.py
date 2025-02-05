@@ -12,7 +12,7 @@ from database.utils.delete_uploader import delete_uploader
 from database.utils.update_uploader import update_uploader
 
 uploader_manager_router = APIRouter(
-    prefix="/UploaderManager", tags=["Manage"], dependencies=[Depends(key_auth)]
+    prefix="/uploader_manager", tags=["Manage"], dependencies=[Depends(key_auth)]
 )
 
 
@@ -43,7 +43,7 @@ async def delete_uploader_(mid: int = Form(title="UP主的mid")) -> ResponseMode
 
 
 @uploader_manager_router.post("/update_uploader")
-async def update_uploader_(mid: int = Form()) -> ResponseModel:
+async def update_uploader_(mid: int = Form(title="UP主的mid")) -> ResponseModel:
     uploader = Uploader(mid)
     await uploader.async_update_basic_data()
     await update_uploader(uploader)

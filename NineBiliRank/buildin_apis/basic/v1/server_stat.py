@@ -3,7 +3,7 @@ import time
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
-server_stat_router = APIRouter(prefix="/ServerStat", tags=["Server"])
+server_stat_router = APIRouter(prefix="/server_stat", tags=["Server"])
 
 
 class ServerStat(BaseModel):
