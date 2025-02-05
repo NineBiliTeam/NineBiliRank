@@ -176,6 +176,7 @@ class Video(BaseModel):
 
         self.video_info["pages"] = len(data["pages"])
         self.video_info["title"] = data["title"]
+        self.video_info["pic"] = data["pic"]
         self.video_info["uploader_mid"] = data["owner"]["mid"]
         self.video_info["uploader_name"] = data["owner"]["name"]
 
