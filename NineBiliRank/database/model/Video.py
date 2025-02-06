@@ -37,3 +37,9 @@ class VideoDB(Base):
         sql = select(func.count(VideoDB.nbid))
         async with async_session() as session:
             return await session.scalar(sql)
+
+    @staticmethod
+    async def max_id():
+        sql = select(func.max(VideoDB.nbid))
+        async with async_session() as session:
+            return await session.scalar(sql)

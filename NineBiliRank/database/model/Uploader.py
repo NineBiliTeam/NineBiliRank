@@ -22,3 +22,9 @@ class UploaderDB(Base):
         sql = select(func.count(UploaderDB.nbuid))
         async with async_session() as session:
             return await session.scalar(sql)
+
+    @staticmethod
+    async def max_id():
+        sql = select(func.max(UploaderDB.nbuid))
+        async with async_session() as session:
+            return await session.scalar(sql)
