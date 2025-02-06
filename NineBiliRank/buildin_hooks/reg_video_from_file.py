@@ -24,7 +24,6 @@ async def reg_video_from_file():
     for index, bvid in enumerate(bvids):
         try:
             video = Video(bvid)
-            await video.async_update_basic_data()
             await add_video_to_db(video)
             logger.info(
                 f"[{index + 1}|{total}|{round(((index + 1) / total) * 100, 2)}%]成功导入：{video.video_info["title"]}({bvid})"
