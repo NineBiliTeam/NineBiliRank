@@ -23,11 +23,12 @@ NineBiliRank是一个用于Bilibili数据收集的数据框架，基于httpx, fa
 2. 新建虚拟环境并`pip install requirements.txt`。如果使用其他数据库引擎，可能需要安装对应的异步驱动器
 3. `cd NineBiliRank`
 4. 修改`nbrank.py`
+
 ```python
-import StartUp
-from buildin_apis.basic.v1 import basic_v1_router # 内建路由模块 BASIC V1
-from scheduler.reset_database import reset_database # 内建任务 数据库重置
-from buildin_hooks.reg_video_from_file import reg_video_from_file # 内建钩子 从文件注册视频
+import startup
+from buildin_apis.basic.v1 import basic_v1_router  # 内建路由模块 BASIC V1
+from scheduler.reset_database import reset_database  # 内建任务 数据库重置
+from buildin_hooks.reg_video_from_file import reg_video_from_file  # 内建钩子 从文件注册视频
 
 """
 NineBiliRank
@@ -37,7 +38,7 @@ NineBiliRank
 
 if __name__ == "__main__":
     # 初始化NineBiliRank
-    StartUp.init(
+    startup.init(
         # task_：定时任务列表，每一个定时任务按照APScheduler任务语法写在列表内：[[函数名, 触发器], {其他参数的字典...}]
         tasks_=[
             [
@@ -47,10 +48,13 @@ if __name__ == "__main__":
         ],
         # routers_：路由列表，在这里放入需要拓展的APIRouter
         routers_=[basic_v1_router],
-        start_hooks_=[reg_video_from_file]
+        # 启动钩子列表 在服务器启动前运行
+        start_hooks_=[reg_video_from_file],
+        # 异步并行任务列表 在服务器启动同时运行
+        async_start_tasks_=[],
     )
     # 启动NineBiliRank
-    StartUp.run()
+    startup.run()
 ```
 5. 修改`BasicConfig.yml`，配置数据库等信息
 6. 按照`BasicConfig.yml`的说明，修改其他第三方模块的配置....

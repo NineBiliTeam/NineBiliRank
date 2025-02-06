@@ -1,3 +1,4 @@
+import asyncio
 from contextlib import asynccontextmanager
 
 import fastapi_cdn_host
@@ -17,7 +18,7 @@ from scheduler.reset_database import reset_database
 
 tasks, scheduler = list(), AsyncIOScheduler()
 routers = list()
-start_hooks = list()
+start_hooks, async_start_tasks = list(), list()
 
 
 @asynccontextmanager
@@ -29,6 +30,9 @@ async def start_hook(_app: FastAPI):
         scheduler.add_job(*task[0], **task[1])
         logger.success(f"成功启用定时任务：{task[0][0].__name__}")
     scheduler.start()
+    for async_task in async_start_tasks:
+        asyncio.get_event_loop().create_task(async_task())
+        logger.info(f"正在运行异步并行启动任务：{async_task.__name__}")
     for hook_ in start_hooks:
         logger.info(f"正在运行启动钩子：{hook_.__name__}")
         await hook_()
@@ -53,6 +57,7 @@ def init(
     proxy_pool=None,
     routers_=None,
     start_hooks_=None,
+        async_start_tasks_=None,
 ):
     """
     初始化NineBiliRank
@@ -61,19 +66,23 @@ def init(
     :param proxy_pool: 自定义代理源
     :param routers_: 自定义APIRouter列表:
     :param start_hooks_: 启动钩子列表
+    :param async_start_tasks_: 异步并行钩子列表
     :return:
     """
-    global tasks, routers, start_hooks
+    global tasks, routers, start_hooks, async_start_tasks
     if tasks_ is None:
         tasks_ = []
     if routers_ is None:
         routers_ = []
     if start_hooks_ is None:
         start_hooks_ = []
+    if async_start_tasks_ is None:
+        async_start_tasks_ = []
     Config.get_instance(proxy_pool=proxy_pool, filter_=filter_)
     routers = routers_
     tasks = tasks_
     start_hooks = start_hooks_
+    async_start_tasks = async_start_tasks_
 
 
 config = get_config_from_file()
@@ -104,12 +113,12 @@ def run(debug: bool = False, *args, **kwargs):
 
     if debug:
         uvicorn.run(
-            "StartUp:fastapi_app", host=host, port=port, reload=True, reload_delay=0.01
+            "startup:fastapi_app", host=host, port=port, reload=True, reload_delay=0.01
         )
     else:
         run_uvicorn_loguru(
             uvicorn.Config(
-                "StartUp:fastapi_app",
+                "startup:fastapi_app",
                 host=host,
                 port=port,
                 reload=debug,

@@ -1,4 +1,7 @@
-import StartUp
+import asyncio
+
+from logger import logger
+import startup
 from buildin_apis.basic.v1 import basic_v1_router
 from buildin_hooks.reg_video_from_file import reg_video_from_file
 from scheduler.reset_database import reset_database
@@ -13,7 +16,7 @@ NineBiliRank
 
 if __name__ == "__main__":
     # 初始化NineBiliRank
-    StartUp.init(
+    startup.init(
         tasks_=[
             [
                 (reset_database, "cron"),
@@ -22,6 +25,7 @@ if __name__ == "__main__":
         ],
         routers_=[basic_v1_router],
         start_hooks_=[reg_video_from_file],
+        async_start_tasks_=[],
     )
     # 启动NineBiliRank
-    StartUp.run()
+    startup.run()
