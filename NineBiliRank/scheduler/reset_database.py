@@ -16,7 +16,7 @@ async def reset_database():
     rand_min = get_config()["basic_config"]["spyder"]["sleep_min"]
     rand_max = get_config()["basic_config"]["spyder"]["sleep_max"]
     logger.info("正在重置视频")
-    max = VideoDB.max_id()
+    max_ = VideoDB.max_id()
     i = 0
     # 重置视频
     total = await VideoDB.count()
@@ -31,7 +31,7 @@ async def reset_database():
                 result = result.all()
                 if len(result) == 0:
                     continue
-                if i > max:
+                if i > max_:
                     break
 
             video_db: VideoDB = result[0]
