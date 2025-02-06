@@ -14,7 +14,7 @@ from database.utils.search_video import (
 video_router = APIRouter(prefix="/video", tags=["Video"])
 
 
-@video_router.get("/{vid}/get_stat")
+@video_router.get("/{vid}")
 async def get_stat(vid: Annotated[str, Path(title="视频ID，支持AVID与BVID")]) -> Video:
     """
     获取视频的当前数据.
