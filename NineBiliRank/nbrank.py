@@ -25,7 +25,7 @@ if __name__ == "__main__":
         ],
         routers_=[basic_v1_router],
         start_hooks_=[reg_video_from_file],
-        async_start_tasks_=[reset_database],
+        async_start_tasks_=[],
     )
     # 启动NineBiliRank
     startup.run()
