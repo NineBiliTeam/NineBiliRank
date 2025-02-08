@@ -71,7 +71,8 @@ database:
   # 要连接到哪个数据库？
   # 需要使用SQLAlchemy URL的形式
   # 具体请参阅https://docs.sqlalchemy.org.cn/en/20/core/engines.html
-  db_url: "sqlite+aiomysql:///example.sqlite3"
+  # 如果启用多线程爬虫，则不支持sqlite
+  db_url: "sqlite+aiosqlite:///example.sqlite3"
 
 #################
 # Filter Config #
@@ -97,8 +98,8 @@ spyder:
     # 是否启用
     # 如果使用代理源，不推荐启用
     # 如果使用Sqlite，最好别启用，可能会导致存入失败
-    #（Sqlite不建议并发使用，请参阅https://docs.sqlalchemy.org/en/20/dialects/sqlite.html#database-locking-behavior-concurrency）
-    enable: true
+    #（Sqlite不可以并发使用，请参阅https://docs.sqlalchemy.org/en/20/dialects/sqlite.html#database-locking-behavior-concurrency）
+    enable: false
     # 异步爬虫线程数？
     # 开启多少个async task
     task_count: 16
