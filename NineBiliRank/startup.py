@@ -22,6 +22,7 @@ routers = list()
 start_hooks, async_start_tasks = list(), list()
 allow_origins = list()
 
+
 @asynccontextmanager
 async def start_hook(_app: FastAPI):
     """
@@ -59,7 +60,7 @@ def init(
     routers_=None,
     start_hooks_=None,
     async_start_tasks_=None,
-        allow_origins_=None
+    allow_origins_=None,
 ):
     """
     初始化NineBiliRank

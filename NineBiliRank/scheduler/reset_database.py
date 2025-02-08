@@ -30,6 +30,9 @@ async def _get_nbuid():
             yield nbuid
 
 async def reset_database():
+    global nbid, nbuid
+    nbid = 0
+    nbuid = 0
     enable = get_config_from_file()["basic_config"]["spyder"]["async"]["enable"]
     task_count = get_config_from_file()["basic_config"]["spyder"]["async"]["task_count"]
     if enable:
